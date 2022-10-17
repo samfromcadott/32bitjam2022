@@ -86,14 +86,15 @@ int main() {
 		// FntFlush(-1);
 		player.velocity = (vec2){0, 0};
 
-		// if ( button_pressed(0, BTN_UP) )
-		// 	player.velocity.y -= 2;
-		// if ( button_pressed(0, BTN_DOWN) )
-		// 	player.velocity.y += 2;
+		// Walking
 		if ( button_pressed(0, BTN_LEFT) )
 			player.velocity.x -= 2;
 		if ( button_pressed(0, BTN_RIGHT) )
 			player.velocity.x += 2;
+
+		// Jumping
+		if ( button_pressed(0, BTN_CROSS) )
+			player.velocity.y -= 5;
 
 		move_object(&player);
 
