@@ -26,7 +26,6 @@ GsOT OT;
 u_long ot[2][OTLEN];
 int db = 0;
 
-// char pribuff[2][32768];
 char pribuff[256];
 
 char *nextpri;          // Next primitive pointer
@@ -60,8 +59,7 @@ void display() {
 	GsSwapDispBuff();
 
 	GsDrawOt(&OT);
-	// DrawOTag(ot[db]+OTLEN-1);   // Draw the ordering table
-	// db = !db;                   // Swap buffers on every pass (alternates between 1 and 0)
+
 	GsSetWorkBase(pribuff);
 	GsClearOt(0, 0, &OT);
 	GsSortClear(64, 64, 128, &OT);
@@ -84,81 +82,9 @@ u_long* load_file(char *filename) {
 
 }
 
-void LoadTexture(u_long *tim, TIM_IMAGE *tparam) {
-	// Read TIM information
-	OpenTIM(tim);
-	ReadTIM(tparam);
-
-	// Upload pixel data to framebuffer
-	LoadImage(tparam->prect, (u_long*)tparam->paddr);
-	DrawSync(0);
-
-	// Upload CLUT to framebuffer if present
-	if( tparam->mode & 0x8 ) {
-		LoadImage(tparam->crect, (u_long*)tparam->caddr);
-		DrawSync(0);
-
-	}
-
-}
-
-void draw_image(SPRT *sprt) {
-	ClearOTagR(ot[db], OTLEN);      // Clear ordering table
-
-	// Sort textured sprite
-
-	// sprt = (SPRT*)nextpri;
-
-	setSprt(sprt);                  // Initialize the primitive (very important)
-	setXY0(sprt, 48, 48);           // Position the sprite at (48,48)
-	setWH(sprt, 64, 64);            // Set size to 64x64 pixels
-	setUV0(sprt,                    // Set UV coordinates
-		tim_uoffs,
-		tim_voffs);
-	setClut(sprt,                   // Set CLUT coordinates to sprite
-		tim_crect.x,
-		tim_crect.y);
-	setRGB0(sprt,                   // Set primitive color
-		128, 128, 128);
-	addPrim(ot[db], sprt);          // Sort primitive to OT
-
-	// nextpri += sizeof(SPRT);        // Advance next primitive address
-
-}
-
-
-void loadstuff(void) {
-
-	TIM_IMAGE my_image;         // TIM image parameters
-
-	// extern u_long tim_my_image[]; // TODO: load image from disk here
-	u_long *tim_my_image = load_file("\\TX64.TIM;1");
-
-	// Load the texture
-	LoadTexture(tim_my_image, &my_image);
-
-	// Copy the TIM coordinates
-	tim_prect   = *my_image.prect;
-	tim_crect   = *my_image.crect;
-	tim_mode    = my_image.mode;
-
-	// Calculate U,V offset for TIMs that are not page aligned
-	tim_uoffs = (tim_prect.x%64)<<(2-(tim_mode&0x3));
-	tim_voffs = (tim_prect.y&0xff);
-
-}
-
 int main() {
 	init();
 	short x = 32, y =32;
-
-	// SPRT *sprt;
-	// TILE *tile;
-
-	// loadstuff();
-
-	// GsDRAWENV.tpage = getTPage( tim_mode&0x3, 0, tim_prect.x, tim_prect.y );
-	// draw[1].tpage = getTPage( tim_mode&0x3, 0, tim_prect.x, tim_prect.y );
 
 	char* text_file = (char*)load_file("\\ANNABEL.TXT;1");
 
@@ -166,27 +92,10 @@ int main() {
 	GsSortClear(64, 64, 128, &OT);
 
 	while (1) {
-		// GsClearDispArea(64, 64, 128);
-		// GsSetWorkBase(pribuff);
-		// GsClearOt(0, 0, &OT);
-		// GsSortClear(64, 64, 128, &OT);
-
 		FntLoad(960, 0);
 		FntOpen(MARGINX+x, MARGINY+y, SCREENXRES - MARGINX * 2, FONTSIZE, 0, 1024 );
 		FntPrint("%s", text_file);
 		FntFlush(-1);
-
-		// draw_image(sprt);
-
-		// ClearOTagR(ot[db], OTLEN);  // Clear ordering table
-		// tile = (TILE*)nextpri;         // Cast next primitive
-		//
-		// setTile(tile);                 // Initialize the primitive (very important)
-		// setXY0(tile, 32+x, 32);          // Set primitive (x,y) position
-		// setWH(tile, 64, 64);           // Set primitive size
-		// setRGB0(tile, 255, 255, 0);    // Set color yellow
-		//
-		// addPrim(ot[db], tile);         // Add primitive to the ordering table
 
 		GsBOXF tile = {
 			0,
@@ -195,8 +104,6 @@ int main() {
 			255, 255, 0
 		};
 		GsSortBoxFill(&tile, &OT, 0);
-
-
 
 		x = (x+1) % SCREENXRES;
 		y = (y+1) % SCREENYRES;
