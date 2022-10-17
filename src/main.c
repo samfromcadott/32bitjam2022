@@ -79,6 +79,16 @@ int main() {
 		};
 		GsSortBoxFill(&tile, &OT, 0);
 
+		GsBOXF tile2 = {
+			0,
+			200, 200,
+			128, 64,
+			255, 0, 255
+		};
+		GsSortBoxFill(&tile2, &OT, 0);
+
+		GsSetOrign(-x+CENTERX, -y+CENTERY);
+
 		// x = (x+1) % SCREENXRES;
 		// y = (y+1) % SCREENYRES;
 
