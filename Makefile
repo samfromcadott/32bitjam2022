@@ -7,7 +7,6 @@ cleansub:
 
 TARGET = witch
 
-# SRCS = src/main.c src/init.c src/render.c
-SRCS = src/main.c \
+SRCS = src/main.c src/render.c src/input.c
 
 include common.mk
