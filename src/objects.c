@@ -7,6 +7,7 @@
 
 #include "render.h"
 #include "objects.h"
+#include "util.h"
 
 void render_object(const Object *object) {
 	GsBOXF box = {
@@ -25,6 +26,7 @@ void move_object(Object *object) {
 	object->position.x += object->velocity.x;
 	// object->position.y += object->velocity.y;
 	object->position.y += object->velocity.y;
-	if ( object->gravity ) object->velocity.y += gravity;
+	// if ( object->gravity ) object->velocity.y += gravity;
+	if ( object->gravity ) object->velocity.y = min(gravity, object->velocity.y + gravity);
 
 }
