@@ -17,8 +17,10 @@ typedef struct {
 	vec2 velocity;
 	u_short r, g, b;
 	u_short width, height;
-	bool active, solid;
+	bool active, solid, gravity;
 } Object;
+
+static const int gravity = 3;
 
 void render_object(const Object *object);
 void move_object(Object *object);

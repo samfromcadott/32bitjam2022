@@ -66,7 +66,7 @@ int main() {
 		(vec2){0, 0},
 		0, 127, 192,
 		32, 48,
-		true, true
+		true, true, true
 	};
 
 	Object floor = {
@@ -76,7 +76,7 @@ int main() {
 		(vec2){0, 0},
 		64, 64, 64,
 		128, 64,
-		true, true
+		true, true, false
 	};
 
 	while (1) {
@@ -84,22 +84,23 @@ int main() {
 		// FntOpen(MARGINX+x, MARGINY+y, SCREENXRES - MARGINX * 2, FONTSIZE, 0, 1024 );
 		// FntPrint("%s", text_file);
 		// FntFlush(-1);
+		player.velocity = (vec2){0, 0};
 
-		if ( button_pressed(0, BTN_UP) )
-			y-=2;
-		if ( button_pressed(0, BTN_DOWN) )
-			y+=2;
+		// if ( button_pressed(0, BTN_UP) )
+		// 	player.velocity.y -= 2;
+		// if ( button_pressed(0, BTN_DOWN) )
+		// 	player.velocity.y += 2;
 		if ( button_pressed(0, BTN_LEFT) )
-			x-=2;
+			player.velocity.x -= 2;
 		if ( button_pressed(0, BTN_RIGHT) )
-			x+=2;
+			player.velocity.x += 2;
 
-		player.position = (vec2){x, y};
+		move_object(&player);
 
 		render_object(&player);
 		render_object(&floor);
 
-		GsSetOrign(-x+CENTERX, -y+CENTERY);
+		GsSetOrign(-player.position.x+CENTERX, -player.position.y+CENTERY);
 
 		display();
 
