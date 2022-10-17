@@ -31,6 +31,6 @@ void display() {
 
 	GsSetWorkBase(pribuff);
 	GsClearOt(0, 0, &OT);
-	GsSortClear(64, 64, 128, &OT);
+	GsSortClear(128, 128, 128, &OT);
 
 }
