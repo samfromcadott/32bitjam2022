@@ -31,4 +31,4 @@ typedef struct {
 u_char padbuff[2][34];
 
 void init_input();
-bool button_pressed(int controller, u_short button);
+bool button_pressed(const int controller, const u_short button);

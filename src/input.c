@@ -18,7 +18,7 @@ void init_input() {
 
 }
 
-bool button_pressed(int controller, u_short button) {
+bool button_pressed(const int controller, const u_short button) {
 	PADTYPE* pad = (PADTYPE*)padbuff[controller];
 
 	// Only parse inputs when a controller is connected
