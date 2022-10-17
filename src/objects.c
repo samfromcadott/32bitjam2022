@@ -21,7 +21,10 @@ void render_object(const Object *object) {
 }
 
 void move_object(Object *object) {
+	// object->position = vec_add(object->position, object->velocity);
+	object->position.x += object->velocity.x;
+	// object->position.y += object->velocity.y;
+	object->position.y += object->velocity.y;
 	if ( object->gravity ) object->velocity.y += gravity;
-	object->position = vec_add(object->position, object->velocity);
 
 }

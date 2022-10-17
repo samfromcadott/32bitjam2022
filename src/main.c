@@ -72,7 +72,7 @@ int main() {
 	Object floor = {
 		OBJECT_FLOOR,
 		0,
-		(vec2){200, 200},
+		(vec2){0, 200},
 		(vec2){0, 0},
 		64, 64, 64,
 		128, 64,
@@ -84,17 +84,31 @@ int main() {
 		// FntOpen(MARGINX+x, MARGINY+y, SCREENXRES - MARGINX * 2, FONTSIZE, 0, 1024 );
 		// FntPrint("%s", text_file);
 		// FntFlush(-1);
-		player.velocity = (vec2){0, 0};
+		// player.velocity = (vec2){0, 0};
+		player.velocity.x = 0;
+		// player.velocity.y = 5;
+		player.gravity = true;
+
+		bool collision = (
+			player.position.x <= floor.position.x + floor.width &&
+			player.position.x + player.width >= floor.position.x &&
+			player.position.y <= floor.position.y + floor.height &&
+			player.position.y + player.height >= floor.position.y
+		);
+		if ( collision ) {
+			player.gravity = false;
+			player.velocity.y = 0;
+		}
 
 		// Walking
 		if ( button_pressed(0, BTN_LEFT) )
-			player.velocity.x -= 2;
+			player.velocity.x = -3;
 		if ( button_pressed(0, BTN_RIGHT) )
-			player.velocity.x += 2;
+			player.velocity.x = +3;
 
 		// Jumping
-		if ( button_pressed(0, BTN_CROSS) )
-			player.velocity.y -= 5;
+		if ( button_pressed(0, BTN_CROSS) && collision )
+			player.velocity.y -= 20;
 
 		move_object(&player);
 
