@@ -1,0 +1,9 @@
+psyq/
+*.bin
+*.cue
+*.map
+*.ps-exe
+*.elf
+*.7z
+*.dep
+*.o
