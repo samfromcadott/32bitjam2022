@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <libgte.h>
 #include <libetc.h>
@@ -9,6 +10,8 @@
 
 #include "render.h"
 #include "input.h"
+#include "objects.h"
+#include "vector.h"
 
 #define CD_SECTOR_SIZE 2048
 // Bytes to sectors
@@ -56,6 +59,26 @@ int main() {
 	GsClearOt(0, 0, &OT);
 	GsSortClear(64, 64, 128, &OT);
 
+	Object player = {
+		OBJECT_PLAYER,
+		0,
+		(vec2){32, 32},
+		(vec2){0, 0},
+		255, 255, 0,
+		64, 64,
+		true, true
+	};
+
+	Object floor = {
+		OBJECT_FLOOR,
+		0,
+		(vec2){200, 200},
+		(vec2){0, 0},
+		64, 64, 64,
+		128, 64,
+		true, true
+	};
+
 	while (1) {
 		// FntLoad(960, 0);
 		// FntOpen(MARGINX+x, MARGINY+y, SCREENXRES - MARGINX * 2, FONTSIZE, 0, 1024 );
@@ -63,34 +86,20 @@ int main() {
 		// FntFlush(-1);
 
 		if ( button_pressed(0, BTN_UP) )
-			y--;
+			y-=2;
 		if ( button_pressed(0, BTN_DOWN) )
-			y++;
+			y+=2;
 		if ( button_pressed(0, BTN_LEFT) )
-			x--;
+			x-=2;
 		if ( button_pressed(0, BTN_RIGHT) )
-			x++;
+			x+=2;
 
-		GsBOXF tile = {
-			0,
-			x, y,
-			64, 64,
-			255, 255, 0
-		};
-		GsSortBoxFill(&tile, &OT, 0);
+		player.position = (vec2){x, y};
 
-		GsBOXF tile2 = {
-			0,
-			200, 200,
-			128, 64,
-			255, 0, 255
-		};
-		GsSortBoxFill(&tile2, &OT, 0);
+		render_object(&player);
+		render_object(&floor);
 
 		GsSetOrign(-x+CENTERX, -y+CENTERY);
-
-		// x = (x+1) % SCREENXRES;
-		// y = (y+1) % SCREENYRES;
 
 		display();
 
