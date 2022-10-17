@@ -7,30 +7,17 @@
 #include <libcd.h>
 #include <malloc.h>
 
+#include "render.h"
+
 #define CD_SECTOR_SIZE 2048
 // Bytes to sectors
 #define BtoS(len) ( ( len + CD_SECTOR_SIZE - 1 ) / CD_SECTOR_SIZE )
 
-#define SCREENXRES 640 // Screen width
-#define SCREENYRES 480 // Screen height
-#define CENTERX SCREENXRES/2 // Center of screen on x
-#define CENTERY SCREENYRES/2 // Center of screen on y
-#define MARGINX 16 // margins for text display
-#define MARGINY 16
-#define FONTSIZE 8 * 60 // Text Field Height
+
 static unsigned char heap[0x40000];
 
-#define OTLEN 8
-
-GsOT OT;
-u_long ot[2][OTLEN];
-int db = 0;
-
-char pribuff[256];
 
 u_char padbuff[2][34];
-
-char *nextpri;          // Next primitive pointer
 
 int tim_mode;           // TIM image parameters
 RECT tim_prect,tim_crect;
@@ -65,40 +52,17 @@ typedef struct _PADTYPE
 } PADTYPE;
 
 void init() {
-	SetVideoMode(MODE_NTSC);
-	GsInitGraph(SCREENXRES, SCREENYRES, GsINTER | GsOFSGPU, 1, 0);
-	GsDefDispBuff(0, 0, 0, 0);
-	GsInitVcount();
-
-	SetDispMask(1);
+	init_display();
 
 	// Initialize CD and heap
 	CdInit();
 	InitHeap((u_long *)heap, sizeof(heap));
-
-	// Initialize OT
-	OT.length = OTLEN;
-	OT.org = (GsOT_TAG*)ot;
-	GsSetWorkBase(pribuff);
 
 	// Initialize the pads
 	InitPAD( padbuff[0], 34, padbuff[1], 34 );
 
 	// Begin polling
 	StartPAD();
-
-}
-
-void display() {
-	DrawSync(0);
-	VSync(0);
-	GsSwapDispBuff();
-
-	GsDrawOt(&OT);
-
-	GsSetWorkBase(pribuff);
-	GsClearOt(0, 0, &OT);
-	GsSortClear(64, 64, 128, &OT);
 
 }
 
