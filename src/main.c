@@ -75,9 +75,9 @@ int main() {
 		0,
 		(vec2){32, 32},
 		(vec2){0, 0},
-		5,
-		2, 2,
-		2, 2,
+		20,
+		20, 1,
+		20, 1,
 		2, 2,
 		0, 127, 192,
 		32, 48,
@@ -112,12 +112,13 @@ int main() {
 		// 	player.velocity.x += max(-player_speed, player.velocity.x-player_speed);
 		// if ( button_pressed(0, BTN_RIGHT) )
 		// 	player.velocity.x += min(+player_speed, player.velocity.x+player_speed);
+		int dx = 0;
 		if ( button_pressed(0, BTN_LEFT) )
-			player_walk(&player, -1);
+			dx--;
 		if ( button_pressed(0, BTN_RIGHT) )
-			player_walk(&player, +1);
-		if ( !button_pressed(0, BTN_LEFT) && !button_pressed(0, BTN_RIGHT) )
-			player_walk(&player, 0);
+			dx++;
+
+		player_walk(&player, dx);
 
 		// Jumping
 		// if ( button_pressed(0, BTN_CROSS) && collision )
