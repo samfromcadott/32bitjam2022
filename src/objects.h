@@ -20,7 +20,7 @@ typedef struct {
 	bool active, solid, gravity;
 } Object;
 
-static const int gravity = 30;
+static const int gravity = 50;
 
 void render_object(const Object *object);
 void move_object(Object *object);

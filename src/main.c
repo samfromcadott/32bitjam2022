@@ -12,6 +12,8 @@
 #include "input.h"
 #include "objects.h"
 #include "vector.h"
+#include "util.h"
+#include "player.h"
 
 #define CD_SECTOR_SIZE 2048
 // Bytes to sectors
@@ -59,14 +61,27 @@ int main() {
 	GsClearOt(0, 0, &OT);
 	GsSortClear(64, 64, 128, &OT);
 
-	Object player = {
-		OBJECT_PLAYER,
+	// Object player = {
+	// 	OBJECT_PLAYER,
+	// 	0,
+	// 	(vec2){32, 32},
+	// 	(vec2){0, 0},
+	// 	0, 127, 192,
+	// 	32, 48,
+	// 	true, true, true
+	// };
+
+	Player player = {
 		0,
 		(vec2){32, 32},
 		(vec2){0, 0},
+		5,
+		2, 2,
+		2, 2,
+		2, 2,
 		0, 127, 192,
 		32, 48,
-		true, true, true
+		true, false, true
 	};
 
 	Object floor = {
@@ -86,43 +101,53 @@ int main() {
 		// FntFlush(-1);
 		// player.velocity = (vec2){0, 0};
 		// player.velocity.x = 0;
-		player.velocity.x /= 2;
-		player.gravity = true;
-		bool collision, want_jump;
+		// player.velocity.x /= 2;
+		// player.gravity = true;
+		// bool collision, want_jump;
+		// int player_speed = 5;
+		// if ( !collision ) player_speed = 2;
 
 		// Walking
+		// if ( button_pressed(0, BTN_LEFT) )
+		// 	player.velocity.x += max(-player_speed, player.velocity.x-player_speed);
+		// if ( button_pressed(0, BTN_RIGHT) )
+		// 	player.velocity.x += min(+player_speed, player.velocity.x+player_speed);
 		if ( button_pressed(0, BTN_LEFT) )
-			player.velocity.x = -10;
+			player_walk(&player, -1);
 		if ( button_pressed(0, BTN_RIGHT) )
-			player.velocity.x = +10;
+			player_walk(&player, +1);
+		if ( !button_pressed(0, BTN_LEFT) && !button_pressed(0, BTN_RIGHT) )
+			player_walk(&player, 0);
 
 		// Jumping
-		if ( button_pressed(0, BTN_CROSS) && collision )
-			// want_jump = true;
-			player.velocity.y -= 12;
+		// if ( button_pressed(0, BTN_CROSS) && collision )
+		// 	// want_jump = true;
+		// 	player.velocity.y = -50;
 
 		// if ( !button_pressed(0, BTN_CROSS) && want_jump && collision ) {
 		// 	player.velocity.y -= 15;
 		// 	want_jump = false;
 		// }
 
-		move_object(&player);
+		// move_object(&player);
+		//
+		// collision = (
+		// 	player.position.x <= floor.position.x + floor.width &&
+		// 	player.position.x + player.width >= floor.position.x &&
+		// 	player.position.y <= floor.position.y + floor.height &&
+		// 	player.position.y + player.height >= floor.position.y
+		// );
+		// if ( collision ) {
+		// 	player.gravity = false;
+		// 	player.velocity.y = 0;
+		// 	player.position.y = floor.position.y - player.height;
+		// }
 
-		collision = (
-			player.position.x <= floor.position.x + floor.width &&
-			player.position.x + player.width >= floor.position.x &&
-			player.position.y <= floor.position.y + floor.height &&
-			player.position.y + player.height >= floor.position.y
-		);
-		if ( collision ) {
-			player.gravity = false;
-			player.velocity.y = 0;
-			player.position.y = floor.position.y - player.height;
-		}
+		player_update(&player);
 
 
 
-		render_object(&player);
+		player_render(&player);
 		render_object(&floor);
 
 		GsSetOrign(-player.position.x+CENTERX, -player.position.y+CENTERY);
