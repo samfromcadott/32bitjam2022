@@ -61,27 +61,17 @@ int main() {
 	GsClearOt(0, 0, &OT);
 	GsSortClear(64, 64, 128, &OT);
 
-	// Object player = {
-	// 	OBJECT_PLAYER,
-	// 	0,
-	// 	(vec2){32, 32},
-	// 	(vec2){0, 0},
-	// 	0, 127, 192,
-	// 	32, 48,
-	// 	true, true, true
-	// };
-
 	Player player = {
 		0,
 		(vec2){32, 32},
 		(vec2){0, 0},
 		20,
-		20, 1,
-		20, 1,
+		5, 1,
+		5, 1,
 		2, 2,
 		0, 127, 192,
 		32, 48,
-		true, false, true
+		true, false, false
 	};
 
 	Object floor = {
@@ -95,23 +85,7 @@ int main() {
 	};
 
 	while (1) {
-		// FntLoad(960, 0);
-		// FntOpen(MARGINX+x, MARGINY+y, SCREENXRES - MARGINX * 2, FONTSIZE, 0, 1024 );
-		// FntPrint("%s", text_file);
-		// FntFlush(-1);
-		// player.velocity = (vec2){0, 0};
-		// player.velocity.x = 0;
-		// player.velocity.x /= 2;
-		// player.gravity = true;
-		// bool collision, want_jump;
-		// int player_speed = 5;
-		// if ( !collision ) player_speed = 2;
-
 		// Walking
-		// if ( button_pressed(0, BTN_LEFT) )
-		// 	player.velocity.x += max(-player_speed, player.velocity.x-player_speed);
-		// if ( button_pressed(0, BTN_RIGHT) )
-		// 	player.velocity.x += min(+player_speed, player.velocity.x+player_speed);
 		int dx = 0;
 		if ( button_pressed(0, BTN_LEFT) )
 			dx--;
@@ -120,33 +94,19 @@ int main() {
 
 		player_walk(&player, dx);
 
-		// Jumping
-		// if ( button_pressed(0, BTN_CROSS) && collision )
-		// 	// want_jump = true;
-		// 	player.velocity.y = -50;
-
-		// if ( !button_pressed(0, BTN_CROSS) && want_jump && collision ) {
-		// 	player.velocity.y -= 15;
-		// 	want_jump = false;
-		// }
-
-		// move_object(&player);
-		//
-		// collision = (
-		// 	player.position.x <= floor.position.x + floor.width &&
-		// 	player.position.x + player.width >= floor.position.x &&
-		// 	player.position.y <= floor.position.y + floor.height &&
-		// 	player.position.y + player.height >= floor.position.y
-		// );
-		// if ( collision ) {
-		// 	player.gravity = false;
-		// 	player.velocity.y = 0;
-		// 	player.position.y = floor.position.y - player.height;
-		// }
+		if ( button_pressed(0, BTN_CROSS) && player.on_floor ) {
+			player.position.y -= 200;
+		}
 
 		player_update(&player);
 
+		player_gravity(&player);
+		player_collision(&player, &floor);
 
+		// FntLoad(960, 0);
+		// FntOpen(MARGINX+x, MARGINY+y, SCREENXRES - MARGINX * 2, FONTSIZE, 0, 1024 );
+		// player.on_floor ? FntPrint("ON FLOOR") : FntPrint("NOT ON FLOOR");
+		// FntFlush(-1);
 
 		player_render(&player);
 		render_object(&floor);

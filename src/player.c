@@ -8,6 +8,7 @@
 #include "vector.h"
 #include "render.h"
 #include "player.h"
+#include "objects.h"
 #include "util.h"
 
 void player_update(Player *player) {
@@ -37,6 +38,77 @@ void player_walk(Player *player, const int dx) {
 	if (player->velocity.x < wish_speed) player->velocity.x += speed_change;
 	if (player->velocity.x > wish_speed) player->velocity.x -= speed_change;
 	if ( abs(player->velocity.x) > player->max_speed ) player->velocity.x = wish_speed;
+
+}
+
+void player_gravity(Player *player) {
+	//We change the character's gravity based on her Y direction
+	int grav_multiplier = 1;
+
+	// If Kit is going up...
+	if (player->velocity.y < 0) {
+		if (player->on_floor) {
+			//Don't change it if Kit is stood on something (such as a moving platform)
+			grav_multiplier = 0;
+		} else {
+				// //Apply upward multiplier if player is rising and holding jump
+				// if (pressingJump && currentlyJumping)
+				// {
+				// 	grav_multiplier = upwardMovementMultiplier;
+				// }
+				// //But apply a special downward multiplier if the player lets go of jump
+				// else
+				// {
+				// 	grav_multiplier = jumpCutOff;
+				// }
+
+		}
+	}
+
+	//Else if going down...
+	else if (player->velocity.y > 0) {
+
+		if (player->on_floor) {
+		//Don't change it if Kit is stood on something (such as a moving platform)
+
+			grav_multiplier = 0;
+		} else {
+
+			//Otherwise, apply the downward gravity multiplier as Kit comes back to Earth
+			// grav_multiplier = downwardMovementMultiplier;
+			grav_multiplier = 2;
+		}
+
+	}
+	//Else not moving vertically at all
+	else {
+		if (player->on_floor) {
+			grav_multiplier = 0;
+		}
+
+		grav_multiplier = 1;
+	}
+
+	//Set the character's Rigidbody's velocity
+	//But clamp the Y variable within the bounds of the speed limit, for the terminal velocity assist option
+	player->velocity.y = gravity * grav_multiplier;
+	player->velocity.y = clamp(player->velocity.y, -100, terminal_velocity);
+}
+
+void player_collision(Player *player, Object *object) {
+	bool collision = (
+		player->position.x <= object->position.x + object->width &&
+		player->position.x + player->width >= object->position.x &&
+		player->position.y <= object->position.y + object->height &&
+		player->position.y + player->height >= object->position.y
+	);
+
+	if ( collision ) {
+		player->on_floor = true;
+		player->position.y = object->position.y - player->height;
+	} else {
+		player->on_floor = false;
+	}
 
 }
 

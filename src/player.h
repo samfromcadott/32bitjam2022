@@ -3,6 +3,7 @@
 #include <stdbool.h>
 
 #include "vector.h"
+#include "objects.h"
 
 typedef struct {
 	u_short timer;
@@ -17,6 +18,11 @@ typedef struct {
 	bool on_floor, on_wall, on_ceiling;
 } Player;
 
+static const int gravity = 10;
+static const int terminal_velocity = 50;
+
 void player_update(Player *player);
-void player_walk(Player *player, const int dx);
 void player_render(const Player *player);
+void player_walk(Player *player, const int dx);
+void player_gravity(Player *player);
+void player_collision(Player *player, Object *object);
