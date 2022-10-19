@@ -84,6 +84,16 @@ int main() {
 		true, true, false
 	};
 
+	Object wall = {
+		OBJECT_FLOOR,
+		0,
+		(vec2){300, 72},
+		(vec2){0, 0},
+		64, 64, 64,
+		64, 128,
+		true, true, false
+	};
+
 	while (1) {
 		// Walking
 		int dx = 0;
@@ -95,21 +105,29 @@ int main() {
 		player_walk(&player, dx);
 
 		if ( button_pressed(0, BTN_CROSS) && player.on_floor ) {
-			player.position.y -= 200;
+			player.velocity.y -= 100;
 		}
 
+		player_gravity(&player);
 		player_update(&player);
 
-		player_gravity(&player);
 		player_collision(&player, &floor);
+		player_collision(&player, &wall);
 
-		// FntLoad(960, 0);
-		// FntOpen(MARGINX+x, MARGINY+y, SCREENXRES - MARGINX * 2, FONTSIZE, 0, 1024 );
+		// player_update(&player);
+
+		// player_walk(&player, dx);
+		// player_gravity(&player);
+		// player_walk(&player, dx);
+
+		FntLoad(960, 0);
+		FntOpen(MARGINX+x, MARGINY+y, SCREENXRES - MARGINX * 2, FONTSIZE, 0, 1024 );
 		// player.on_floor ? FntPrint("ON FLOOR") : FntPrint("NOT ON FLOOR");
 		// FntFlush(-1);
 
 		player_render(&player);
 		render_object(&floor);
+		render_object(&wall);
 
 		GsSetOrign(-player.position.x+CENTERX, -player.position.y+CENTERY);
 
