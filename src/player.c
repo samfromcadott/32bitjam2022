@@ -100,7 +100,7 @@ void player_collision(Player *player, Object *object) {
 	object->width, object->height, object->position.x, object->position.y);
 
 	if (!collided) {
-		player->on_floor = false; player->on_ceiling = false; player->on_wall = false;
+		// player->on_floor = false; player->on_ceiling = false; player->on_wall = false;
 		return;
 	}
 

@@ -120,8 +120,8 @@ int main() {
 
 		player_gravity(&player);
 
-		if ( button_pressed(0, BTN_CROSS) ) {
-			player.velocity.y -= 10;
+		if ( button_pressed(0, BTN_CROSS) && player.on_floor ) {
+			player.velocity.y = -10;
 		}
 
 		player_update(&player);
@@ -130,6 +130,7 @@ int main() {
 		// 	player.velocity.y -= 10;
 		// }
 
+		player.on_floor = false; player.on_ceiling = false; player.on_wall = false;
 		player_collision(&player, &floor);
 		player_collision(&player, &wall);
 		player_collision(&player, &ceiling);
