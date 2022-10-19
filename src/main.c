@@ -66,8 +66,8 @@ int main() {
 		(vec2){32, 32},
 		(vec2){0, 0},
 		20,
-		5, 1,
-		5, 1,
+		5, 5,
+		5, 5,
 		2, 2,
 		0, 127, 192,
 		32, 48,
@@ -114,16 +114,10 @@ int main() {
 		player_collision(&player, &floor);
 		player_collision(&player, &wall);
 
-		// player_update(&player);
-
-		// player_walk(&player, dx);
-		// player_gravity(&player);
-		// player_walk(&player, dx);
-
 		FntLoad(960, 0);
 		FntOpen(MARGINX+x, MARGINY+y, SCREENXRES - MARGINX * 2, FONTSIZE, 0, 1024 );
-		// player.on_floor ? FntPrint("ON FLOOR") : FntPrint("NOT ON FLOOR");
-		// FntFlush(-1);
+		player.on_floor ? FntPrint("ON FLOOR") : FntPrint("NOT ON FLOOR");
+		FntFlush(-1);
 
 		player_render(&player);
 		render_object(&floor);

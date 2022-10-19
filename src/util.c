@@ -13,7 +13,7 @@ inline int max(const int a, const int b) {
 }
 
 inline int sign(int x) {
-	return (x > 0) - (x < 0);
+	return (x >= 0) - (x < 0);
 }
 
 inline int clamp(int n, int min, int max) {
