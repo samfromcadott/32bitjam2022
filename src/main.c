@@ -63,7 +63,7 @@ int main() {
 
 	Player player = {
 		0,
-		(vec2){32, 32},
+		(vec2){300, -20},
 		(vec2){0, 0},
 		20,
 		5, 5,
@@ -94,6 +94,16 @@ int main() {
 		true, true, false
 	};
 
+	Object ceiling = {
+		OBJECT_FLOOR,
+		0,
+		(vec2){0, 50},
+		(vec2){0, 0},
+		64, 64, 64,
+		128, 64,
+		true, true, false
+	};
+
 	while (1) {
 		// Walking
 		int dx = 0;
@@ -104,24 +114,41 @@ int main() {
 
 		player_walk(&player, dx);
 
-		if ( button_pressed(0, BTN_CROSS) && player.on_floor ) {
-			player.velocity.y -= 100;
-		}
+		// if ( button_pressed(0, BTN_CROSS) && player.on_floor ) {
+		// 	player.velocity.y -= 100;
+		// }
 
 		player_gravity(&player);
+
+		if ( button_pressed(0, BTN_CROSS) ) {
+			player.velocity.y -= 10;
+		}
+
 		player_update(&player);
+
+		// if ( button_pressed(0, BTN_CROSS) ) {
+		// 	player.velocity.y -= 10;
+		// }
 
 		player_collision(&player, &floor);
 		player_collision(&player, &wall);
+		player_collision(&player, &ceiling);
+
+		// if ( button_pressed(0, BTN_CROSS) ) {
+		// 	player.position.y -= 10;
+		// }
 
 		FntLoad(960, 0);
 		FntOpen(MARGINX+x, MARGINY+y, SCREENXRES - MARGINX * 2, FONTSIZE, 0, 1024 );
-		player.on_floor ? FntPrint("ON FLOOR") : FntPrint("NOT ON FLOOR");
+		player.on_floor ? FntPrint("ON FLOOR\n") : FntPrint("NOT ON FLOOR\n");
+		player.on_wall ? FntPrint("ON WALL\n") : FntPrint("NOT ON WALL\n");
+		player.on_ceiling ? FntPrint("ON CEILING\n") : FntPrint("NOT ON CEILING\n");
 		FntFlush(-1);
 
 		player_render(&player);
 		render_object(&floor);
 		render_object(&wall);
+		render_object(&ceiling);
 
 		GsSetOrign(-player.position.x+CENTERX, -player.position.y+CENTERY);
 

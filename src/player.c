@@ -49,7 +49,7 @@ void player_gravity(Player *player) {
 	if (player->velocity.y < 0) {
 		if (player->on_floor) {
 			//Don't change it if Kit is stood on something (such as a moving platform)
-			grav_multiplier = 0;
+			grav_multiplier = 1;
 		} else {
 				// //Apply upward multiplier if player is rising and holding jump
 				// if (pressingJump && currentlyJumping)
@@ -71,7 +71,7 @@ void player_gravity(Player *player) {
 		if (player->on_floor) {
 		//Don't change it if Kit is stood on something (such as a moving platform)
 
-			grav_multiplier = 0;
+			grav_multiplier = 1;
 		} else {
 
 			//Otherwise, apply the downward gravity multiplier as Kit comes back to Earth
@@ -83,7 +83,7 @@ void player_gravity(Player *player) {
 	//Else not moving vertically at all
 	else {
 		if (player->on_floor) {
-			grav_multiplier = 0;
+			grav_multiplier = 1;
 		}
 
 		grav_multiplier = 1;
@@ -105,25 +105,25 @@ void player_collision(Player *player, Object *object) {
 	}
 
 	// From above
-	if (player->velocity.y > 0 && player->position.y < object->position.y) {
+	if (player->velocity.y > 0 && player->position.y <= object->position.y) {
 		player->position.y = object->position.y - player->height;
 		player->on_floor = true;
 	}
 
 	// From below
-	else if (player->velocity.y < 0 && player->position.y > object->position.y) {
+	else if (player->velocity.y < 0 && player->position.y >= object->position.y) {
 		player->position.y = object->position.y + object->height;
 		player->on_ceiling = true;
 	}
 
 	// From left
-	else if (player->velocity.x > 0 && player->position.x < object->position.x) {
+	else if (player->velocity.x > 0 && player->position.x <= object->position.x) {
 		player->position.x = object->position.x - player->width;
 		player->on_wall = true;
 	}
 
 	// From right
-	else if (player->velocity.x < 0 && player->position.x > object->position.x) {
+	else if (player->velocity.x < 0 && player->position.x >= object->position.x) {
 		player->position.x = object->position.x + object->width;
 		player->on_wall = true;
 	}

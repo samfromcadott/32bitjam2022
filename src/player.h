@@ -18,7 +18,7 @@ typedef struct {
 	bool on_floor, on_wall, on_ceiling;
 } Player;
 
-static const int gravity = 10;
+static const int gravity = 5;
 static const int terminal_velocity = 50;
 
 void player_update(Player *player);
