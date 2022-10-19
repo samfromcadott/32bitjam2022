@@ -101,28 +101,29 @@ void player_collision(Player *player, Object *object) {
 
 	if (!collided) {
 		player->on_floor = false; player->on_ceiling = false; player->on_wall = false;
+		return;
 	}
 
 	// From above
-	if (player->velocity.y > 0 && collided && player->position.y < object->position.y) {
+	if (player->velocity.y > 0 && player->position.y < object->position.y) {
 		player->position.y = object->position.y - player->height;
 		player->on_floor = true;
 	}
 
 	// From below
-	else if (player->velocity.y < 0 && collided && player->position.y > object->position.y) {
+	else if (player->velocity.y < 0 && player->position.y > object->position.y) {
 		player->position.y = object->position.y + object->height;
 		player->on_ceiling = true;
 	}
 
 	// From left
-	else if (player->velocity.x > 0 && collided && player->position.x < object->position.x) {
+	else if (player->velocity.x > 0 && player->position.x < object->position.x) {
 		player->position.x = object->position.x - player->width;
 		player->on_wall = true;
 	}
 
 	// From right
-	else if (player->velocity.x < 0 && collided && player->position.x > object->position.x) {
+	else if (player->velocity.x < 0 && player->position.x > object->position.x) {
 		player->position.x = object->position.x + object->width;
 		player->on_wall = true;
 	}
