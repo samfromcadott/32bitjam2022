@@ -41,3 +41,16 @@ inline bool collision(int w0, int h0, int x0, int y0, int w1, int h1, int x1, in
 		h0 + y0 > y1
 	);
 }
+
+int isqrt(const unsigned int n) {
+	// Babylonian integer square root
+	int x = n;
+	int y = 1;
+
+	while (x > y) {
+	    x = (x+y)/2;
+	    y = n/x;
+	}
+
+	return x;
+}
