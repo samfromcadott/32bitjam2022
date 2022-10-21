@@ -69,9 +69,10 @@ int main() {
 		5, 5,
 		5, 5,
 		2, 2,
+		10,
 		0, 127, 192,
 		32, 48,
-		true, false, false
+		true, false, false, false
 	};
 
 	Object floor = {
@@ -120,8 +121,13 @@ int main() {
 
 		player_gravity(&player);
 
-		if ( button_pressed(0, BTN_CROSS) && player.on_floor ) {
-			player.velocity.y = -10;
+		if ( button_pressed(0, BTN_CROSS) && player.on_floor && !player.is_jumping ) {
+			// player.velocity.y = -10;
+			player_jump(&player);
+		}
+
+		if ( !button_pressed(0, BTN_CROSS) ) {
+			player.is_jumping = false;
 		}
 
 		player_update(&player);
