@@ -8,16 +8,13 @@
 #include <libcd.h>
 #include <malloc.h>
 
+#include "file.h"
 #include "render.h"
 #include "input.h"
 #include "objects.h"
 #include "vector.h"
 #include "util.h"
 #include "player.h"
-
-#define CD_SECTOR_SIZE 2048
-// Bytes to sectors
-#define BtoS(len) ( ( len + CD_SECTOR_SIZE - 1 ) / CD_SECTOR_SIZE )
 
 static unsigned char heap[0x40000];
 
@@ -33,22 +30,6 @@ void init() {
 	InitHeap((u_long *)heap, sizeof(heap));
 
 	init_input();
-
-}
-
-u_long* load_file(char *filename) {
-	// Get file position from filename
-	CdlFILE file_pos = {0};
-	CdSearchFile( &file_pos, filename);
-
-	// Allocate memory
-	u_long *buffer = malloc( BtoS(file_pos.size) * CD_SECTOR_SIZE );
-
-	CdControl(CdlSetloc, (u_char *)&file_pos.pos, 0);
-	CdRead( (int)BtoS(file_pos.size), (u_long *)buffer, CdlModeSpeed );
-	CdReadSync(0, 0);
-
-	return buffer;
 
 }
 
