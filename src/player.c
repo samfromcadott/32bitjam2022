@@ -62,57 +62,8 @@ void player_jump(Player *player) {
 }
 
 void player_gravity(Player *player) {
-	//We change the character's gravity based on her Y direction
-	int grav_multiplier = 1;
-
-	// // When going up
-	// if (player->velocity.y < 0) {
-	// 	if (player->on_floor) {
-	// 		grav_multiplier = 1; // Don't change when on something
-	// 	} else {
-	// 			// Apply upward multiplier if player is rising and holding jump
-	// 			if ( button_pressed(0, BTN_CROSS) && player->is_jumping ) {
-	// 				grav_multiplier = -1;
-	// 			}
-	// 			// But apply a special downward multiplier if the player lets go of jump
-	// 			else {
-	// 				grav_multiplier = 2;
-	// 			}
-	//
-	// 	}
-	//
-	// 	// grav_multiplier = 1;
-	// }
-	//
-	// // If going down
-	// else if (player->velocity.y > 0) {
-	//
-	// 	if (player->on_floor) {
-	// 	//Don't change it if Kit is stood on something (such as a moving platform)
-	//
-	// 		grav_multiplier = 1;
-	// 	} else {
-	//
-	// 		//Otherwise, apply the downward gravity multiplier as Kit comes back to Earth
-	// 		// grav_multiplier = downwardMovementMultiplier;
-	// 		grav_multiplier = 2;
-	// 	}
-	//
-	// }
-	// //Else not moving vertically at all
-	// else {
-	// 	if (player->on_floor) {
-	// 		grav_multiplier = 1;
-	// 	}
-	//
-	// 	grav_multiplier = 1;
-	// }
-
-	//Set the character's Rigidbody's velocity
-	//But clamp the Y variable within the bounds of the speed limit, for the terminal velocity assist option
-	player->velocity.y = gravity * grav_multiplier;
 	player->velocity.y = gravity;
-	// player->velocity.y = clamp(player->velocity.y, -100, terminal_velocity);
+
 }
 
 void player_collision(Player *player, Object *object) {

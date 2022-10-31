@@ -15,6 +15,7 @@
 #include "vector.h"
 #include "util.h"
 #include "player.h"
+#include "texture.h"
 
 static unsigned char heap[0x40000];
 
@@ -38,6 +39,7 @@ int main() {
 	short x = 32, y =32;
 
 	char* text_file = (char*)load_file("\\ANNABEL.TXT;1");
+	GsIMAGE image = load_texture("\\TX64.TIM;1");
 
 	GsClearOt(0, 0, &OT);
 	GsSortClear(64, 64, 128, &OT);
@@ -87,6 +89,22 @@ int main() {
 	};
 
 	while (1) {
+		int tpage = use_image(&image);
+		GsSPRITE sprite = {
+			(2<<22),
+			100, 100,
+			64, 64,
+			tpage,
+			image.px, image.py,
+			image.cx, image.cy,
+			128, 128, 128,
+			0, 0,
+			4096, 4096,
+			0
+		};
+		GsSortSprite(&sprite, &OT, 0);
+
+
 		// Walking
 		int dx = 0;
 		if ( button_pressed(0, BTN_LEFT) )
@@ -128,9 +146,11 @@ int main() {
 
 		FntLoad(960, 0);
 		FntOpen(MARGINX+x, MARGINY+y, SCREENXRES - MARGINX * 2, FONTSIZE, 0, 1024 );
-		player.on_floor ? FntPrint("ON FLOOR\n") : FntPrint("NOT ON FLOOR\n");
-		player.on_wall ? FntPrint("ON WALL\n") : FntPrint("NOT ON WALL\n");
-		player.on_ceiling ? FntPrint("ON CEILING\n") : FntPrint("NOT ON CEILING\n");
+		// player.on_floor ? FntPrint("ON FLOOR\n") : FntPrint("NOT ON FLOOR\n");
+		// player.on_wall ? FntPrint("ON WALL\n") : FntPrint("NOT ON WALL\n");
+		// player.on_ceiling ? FntPrint("ON CEILING\n") : FntPrint("NOT ON CEILING\n");
+		FntPrint("%d %d\n", image.px, image.py);
+		FntPrint("%d %d\n", image.pw, image.ph);
 		FntFlush(-1);
 
 		player_render(&player);

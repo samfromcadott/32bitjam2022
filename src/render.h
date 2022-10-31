@@ -20,7 +20,7 @@
 GsOT OT;
 u_long ot[2][OTLEN];
 
-char pribuff[256];
+char pribuff[1024];
 
 void init_display();
 void display();
